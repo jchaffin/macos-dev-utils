@@ -15,6 +15,8 @@
 
 
 ;;; Code:
+
+;;;###autoload
 (defun iterm-goto-filedir-or-home ()
   "Go to current working directory
  and focus iTerm."
@@ -31,6 +33,7 @@
     "end tell\n"
     "do shell script \"open -a iTerm\"\n")))
 
+;;;###autoload
 (defun iterm-focus ()
   "If there is an active iTerm session, then
 return focus to that session. Otherwise launch iTerm."
@@ -38,6 +41,7 @@ return focus to that session. Otherwise launch iTerm."
   (do-applescript
    " do shell script \"open -a iTerm\"\n"))
 
+;;;###autoload
 (defun iterm-shell-command (command &optional prefix)
   "cd to `default-directory' then run COMMAND in iTerm.
 With PREFIX, cd to project root."
