@@ -18,4 +18,6 @@
 ;;; Code
 (require 'macos-open-with)
 (require 'macos-iterm)
+
+(provide 'macos-dev-utils)
 ;; macos-dev-utils.el ends here
