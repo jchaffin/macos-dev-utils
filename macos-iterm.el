@@ -28,7 +28,7 @@
     (format "  write text \"cd %s\"\n"
             (replace-regexp-in-string "\\\\" "\\\\\\\\"
                                       (shell-quote-argument
-				       (or default-directory "~"))))
+                                       (or default-directory "~"))))
     "   end tell\n"
     "end tell\n"
     "do shell script \"open -a iTerm\"\n")))
