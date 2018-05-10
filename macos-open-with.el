@@ -24,7 +24,7 @@ macOS application."
                         "open"
                       (read-shell-command "Open current file with: "))
                     " "
-                    buffer-file-name))))
+                    (shell-quote-argument buffer-file-name)))))
 
 
 (defun macos-open-with--exec-bin (bin dir file)
