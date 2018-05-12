@@ -20,7 +20,7 @@
   "If inside a file buffer, return the directory, else return home."
   (let ((filename (buffer-file-name)))
     (if (not (and filename (file-exists-p filename)))
-	      "~/" (file-name-directory filename)))
+	      "~/" (file-name-directory filename))))
 
 ;;;###autoload
 (defun iterm-goto-filedir-or-home ()
