@@ -12,23 +12,25 @@
 ;;; Commentary:
 ;; Provides functions for launching or toggling between a terminal session in
 ;; Iterm.app at certain locations directed by Emacs.
+;; Based on https://sam217pa.github.io/2016/09/01/emacs-iterm-integration/
 
 
 ;;; Code:
+(defun get-file-dir-or-home ()
+  "If inside a file buffer, return the directory, else return home."
+  (let ((filename (buffer-file-name)))
+    (if (not (and filename (file-exists-p filename)))
+	      "~/" (file-name-directory filename)))
 
 ;;;###autoload
 (defun iterm-goto-filedir-or-home ()
-  "Go to current working directory
- and focus iTerm."
+  "Go to current working directory and focus iTerm."
   (interactive)
   (do-applescript
    (concat
     "tell application \"iTerm\"\n"
     "  tell the current session of current window\n"
-    (format "  write text \"cd %s\"\n"
-            (replace-regexp-in-string "\\\\" "\\\\\\\\"
-                                      (shell-quote-argument
-                                       (or default-directory "~"))))
+    (format "  write text \"cd %s\"\n" (get-file-dir-or-home))
     "   end tell\n"
     "end tell\n"
     "do shell script \"open -a iTerm\"\n")))
