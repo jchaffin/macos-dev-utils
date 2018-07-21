@@ -93,6 +93,7 @@ in external editor."
   (interactive)
   (macos-open-with--bin "subl"))
 
+;;;###autoload
 (defun open-with-vscode ()
   (interactive)
   (macos-open-with--bin "code"))
