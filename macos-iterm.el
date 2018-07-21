@@ -70,9 +70,10 @@ With PREFIX, cd to project root."
 (defvar macos-iterm-command-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "g") #'iterm-goto-fildir-or-home)
-    (define-key map (kbd "f") #'iterm-foces)
+    (define-key map (kbd "f") #'iterm-focus)
     (define-key map (kbd "s") #'iterm-shell-command)
-))
+    map)
+  (fset macos-iterm-command-map macos-iterm-command-map))
 
 (provide 'macos-iterm)
 
