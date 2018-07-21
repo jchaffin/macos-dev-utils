@@ -73,7 +73,9 @@ With PREFIX, cd to project root."
     (define-key map (kbd "f") #'iterm-focus)
     (define-key map (kbd "s") #'iterm-shell-command)
     map)
-  (fset macos-iterm-command-map macos-iterm-command-map))
+  "Keymap for macos iterm.")
+
+(fset 'macos-iterm-command-map macos-iterm-command-map)
 
 (provide 'macos-iterm)
 

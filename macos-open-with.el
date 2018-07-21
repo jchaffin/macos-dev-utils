@@ -107,16 +107,18 @@ directory."
   (shell-command
    (concat "gittower" " " (or default-directory dired-directory))))
 
-(defvar macos-open-with-command-map ()
+(defvar macos-open-with-command-map
   (let ((map (make-sparse-keymap)))
-   (define-key map (kbd "o") #'macos-open-with-default-app)
-   (define-key map (kbd "s") #'open-with-sublime-text)
-   (define-key map (kbd "a") #'open-with-atom)
-   (define-key map (kbd "v") #'open-with-vscode)
-   (define-key map (kbd "b") #'open-with-bbedit)
-   (define-key map (kbd "c") #'open-with-code)
-   (define-key map (kbd "t") #'open-with-tower)
-   map)
-  (fset macos-open-with-command-map macos-open-with-command-map))
+    (define-key map (kbd "o") #'macos-open-with-default-app)
+    (define-key map (kbd "s") #'open-with-sublime-text)
+    (define-key map (kbd "a") #'open-with-atom)
+    (define-key map (kbd "v") #'open-with-vscode)
+    (define-key map (kbd "b") #'open-with-bbedit)
+    (define-key map (kbd "c") #'open-with-code)
+    (define-key map (kbd "t") #'open-with-tower)
+    map)
+  "Keymap for macos open with.")
+
+(fset 'macos-open-with-command-map macos-open-with-command-map)
 
  (provide 'macos-open-with)
