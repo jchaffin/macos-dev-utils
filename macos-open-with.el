@@ -103,10 +103,17 @@ in external editor."
 in Tower.app. Else if in a dired buffer, opens the containing
 directory."
   (interactive)
-  (shell-command (concat
-                  "gittower"
-                  " "
-                  (or default-directory dired-directory))))
+  (shell-command
+   (concat "gittower" " " (or default-directory dired-directory))))
 
+(defvar macos-open-with-map ()
+  (let ((map (make-sparse-keymap)))
+   (define-key map "o" #'macos-open-with-default-app)
+   (define-key map "s" #'open-with-sublime-text)
+   (define-key map "a" #'open-with-atom)
+   (define-key map "v" #'open-with-vscode)
+   (define-key map "b" #'open-with-bbedit)
+   (define-key map "c" #'open-with-code)
+   (define-key map "t" #'open-with-tower)))
 
 (provide 'macos-open-with)
