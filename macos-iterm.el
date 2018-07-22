@@ -16,6 +16,13 @@
 
 
 ;;; Code:
+
+(defgroup iterm nil
+  "Customization group for iterm shell"
+  :group 'terminal
+  :group 'macos
+  :prefix "macos-iterm-")
+
 (defun get-file-dir-or-home ()
   "If inside a file buffer, return the directory, else return home."
   (let ((filename (buffer-file-name)))
@@ -67,6 +74,7 @@ With PREFIX, cd to project root."
        "end tell")
       cmd))))
 
+
 (defvar macos-iterm-command-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "g") #'iterm-goto-fildir-or-home)
@@ -76,6 +84,7 @@ With PREFIX, cd to project root."
   "Keymap for macos iterm.")
 
 (fset 'macos-iterm-command-map macos-iterm-command-map)
+
 
 (provide 'macos-iterm)
 

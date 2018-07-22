@@ -107,6 +107,7 @@ directory."
   (shell-command
    (concat "gittower" " " (or default-directory dired-directory))))
 
+
 (defvar macos-open-with-command-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "o") #'macos-open-with-default-app)

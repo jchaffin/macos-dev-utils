@@ -16,6 +16,12 @@
 
 
 ;;; Code
+
+(defgroup macos nil
+  "Customization group for macOS."
+  :group 'environment
+  :prefix "macos-")
+
 (require 'macos-open-with)
 (require 'macos-iterm)
 
