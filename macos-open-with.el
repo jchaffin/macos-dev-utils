@@ -29,16 +29,13 @@ macOS application."
 
 (defun macos-open-with--exec-bin (bin dir file)
   (interactive)
-  (let* ((revealpath (if file
-                         (concat dir file)
-                       dir)))
-    (view-mode)
-    (view-mode-enable)
-    (message (format "Opening %s with %s" revealpath bin))
-    (shell-command (concat
-                    bin
-                    " "
-                    revealpath))))
+  (let ((revealpath (if file (concat dir file) dir)))
+    (if (not (executable-find bin))
+        (error "Cannot find executable: %s" bin)
+      (view-mode)
+      (view-mode-enable)
+      (message (format "Opening %s with %s" revealpath bin))
+      (shell-command (concat bin " " revealpath)))))
 
 
 (defun macos-open-with--editor (f &optional bin)
@@ -51,22 +48,16 @@ in external editor."
                                 (expand-file-name filename-at-point)
                               nil))
          dir file)
-
-    (cond (path
-           (setq dir (file-name-directory path))
-           (setq file (file-name-nondirectory path)))
-          (filename-at-point
-           ;; if filename-at-point is available from dired.
-           (setq dir (file-name-directory filename-at-point))
-           (setq file (file-name-nondirectory filename-at-point)))
-
-          (t
-           ;; Otherwise,
-           (setq dir (expand-file-name default-directory))))
-    (if bin
-        (funcall-interactively f bin dir file)
-      (funcall-interactively f dir file))))
-
+    (destructuring-bind (dir file)
+        (cond (path
+               (list (file-name-directory path)
+                     (file-name-nondirectory path)))
+              ;; dired
+              (file-name-at-point
+               (list (file-name-directory filename-at-point)
+                     (file-name-nondirectory filename-at-point)))
+              (t (list (expand-file-name default-directory) "")))
+      (funcall-interactively f (or bin nil) dir file))))
 
 (defalias 'macos-open-with--bin
   (apply-partially
