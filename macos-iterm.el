@@ -24,10 +24,12 @@
   :prefix "macos-iterm-")
 
 (defun get-file-dir-or-home ()
-  "If inside a file buffer, return the directory, else return home."
-  (let ((filename (buffer-file-name)))
-    (if (not (and filename (file-exists-p filename)))
-	      "~/" (file-name-directory filename))))
+  "If inside a file buffer, reeturn the directory, else return home."
+    (cond ((eq major-mode 'dired-mode)
+           dired-directory)
+          ((stringp buffer-file-name)
+           (directory-file-name buffer-file-name))
+          (t (directory-file-name default-directory))) )
 
 ;;;###autoload
 (defun iterm-goto-filedir-or-home ()
