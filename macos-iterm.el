@@ -25,11 +25,11 @@
 
 (defun get-file-dir-or-home ()
   "If inside a file buffer, reeturn the directory, else return home."
-    (cond ((eq major-mode 'dired-mode)
+  (cond ((eq major-mode 'dired-mode)
            dired-directory)
           ((stringp buffer-file-name)
-           (directory-file-name buffer-file-name))
-          (t (directory-file-name default-directory))) )
+           (file-name-directory buffer-file-name))
+          (t (directory-file-name default-directory))))
 
 ;;;###autoload
 (defun iterm-goto-filedir-or-home ()
