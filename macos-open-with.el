@@ -106,7 +106,7 @@ directory."
     (define-key map (kbd "a") #'open-with-atom)
     (define-key map (kbd "v") #'open-with-vscode)
     (define-key map (kbd "b") #'open-with-bbedit)
-    (define-key map (kbd "c") #'open-with-code)
+    (define-key map (kbd "c") #'open-with-coda)
     (define-key map (kbd "t") #'open-with-tower)
     map)
   "Keymap for macos open with.")
