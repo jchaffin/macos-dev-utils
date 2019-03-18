@@ -30,8 +30,6 @@
          (mapconcat #'identity (append cmd (list file)) " "))
       (message "executable %s not found" exec))))
 
-
-
 (defmacro macos-make-external-command (editor &rest executable)
   "Create an open with editor function for an application
 named EDITOR with executable name or path EXECUTABLE.
@@ -50,7 +48,6 @@ be set to the value of editor."
   (macos-make-external-command "bbedit")
   (macos-make-external-command "coda")
   (macos-make-external-command "sublime-text" "subl")
-  (macos-make-external-command "code" "vscode")
+  (macos-make-external-command "vscode" "code")
   (macos-make-external-command "tower" "gittower"))
-
  (provide 'macos-open-with)

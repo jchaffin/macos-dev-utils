@@ -35,17 +35,17 @@
 (require 'macos-iterm)
 
 (defvar macos-open-with-command-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "o") #'open-with-default)
-    (define-key map (kbd "s") #'open-with-sublime-text)
-    (define-key map (kbd "a") #'open-with-atom)
-    (define-key map (kbd "p") #'open-with-pdfpen)
-    (define-key map (kbd "v") #'open-with-vscode)
-    (define-key map (kbd "b") #'open-with-bbedit)
-    (define-key map (kbd "c") #'open-with-coda)
-    (define-key map (kbd "t") #'open-with-tower)
-    map)
-  "Command map for `macos-open-with'")
+   (let ((map (make-sparse-keymap)))
+     (define-key map (kbd "o") #'open-with-default)
+     (define-key map (kbd "s") #'open-with-sublime-text)
+     (define-key map (kbd "a") #'open-with-atom)
+     (define-key map (kbd "p") #'open-with-pdfpen)
+     (define-key map (kbd "v") #'open-with-vscode)
+     (define-key map (kbd "b") #'open-with-bbedit)
+     (define-key map (kbd "c") #'open-with-coda)
+     (define-key map (kbd "t") #'open-with-tower)
+     map)
+   "Command map for `macos-open-with'")
 
 (fset 'macos-open-with-command-map macos-open-with-command-map)
 
