@@ -1,6 +1,6 @@
 ;;; macos-open-with.el --- Open files in external macOS applications
 ;;
-;; Copyright (c) 2012-2017 Jacob Chaffin
+;; Copyright (c) 2019 Jacob Chaffin
 ;;
 ;; Author:  Jacob Chaffin <jchaffin@ucla.edu>
 ;; Home Page: https://github.com/jchaffin/macos-dev-utils.git
@@ -10,107 +10,41 @@
 ;;; License: GPLv3
 
 ;;; Commentary:
-;; Provides functions for launching or toggling between
-;; external text editors at certain locations directed by Emacs.
+;; Open files and buffers in external macOS applications.
 
 ;;; Code:
-(defun macos-open-with-default-app ()
-  "Opens the current file buffer with the default
-macOS application."
-  (interactive)
-  (when buffer-file-name
-    (shell-command (concat
-                    (if (eq system-type 'darwin)
-                        "open"
-                      (read-shell-command "Open current file with: "))
-                    " "
-                    (shell-quote-argument buffer-file-name)))))
 
-
-(defun macos-open-with--exec-bin (bin dir file)
-  (interactive)
-  (let ((revealpath (if file (concat dir file) dir)))
-    (if (not (executable-find bin))
-        (error "Cannot find executable: %s" bin)
-      (view-mode)
-      (view-mode-enable)
-      (message (format "Opening %s with %s" revealpath bin))
-      (shell-command (concat bin " " revealpath)))))
-
-
-(defun macos-open-with--editor (f &optional bin)
-  "Opens current buffer or file at point
-in external editor."
-  (let* ((path (buffer-file-name))
-         (filename-at-point (dired-file-name-at-point))
-         ;; Create a full path if filename-at-point is non-nil.
-         (filename-at-point (if filename-at-point
-                                (expand-file-name filename-at-point)
-                              nil))
-         dir file)
-    (destructuring-bind (dir file)
-        (cond (path
-               (list (file-name-directory path)
-                     (file-name-nondirectory path)))
-              ;; dired
-              (file-name-at-point
-               (list (file-name-directory filename-at-point)
-                     (file-name-nondirectory filename-at-point)))
-              (t (list (expand-file-name default-directory) "")))
-      (funcall-interactively f (or bin nil) dir file))))
-
-(defalias 'macos-open-with--bin
-  (apply-partially
-   'macos-open-with--editor
-   'macos-open-with--exec-bin))
-
-;;;###autoload
-(defun open-with-atom ()
-  (interactive)
-  (macos-open-with--bin "atom"))
-
-;;;###autoload
-(defun open-with-bbedit ()
-  (interactive)
-  (macos-open-with--bin "bbedit"))
-
-;;;###autoload
-(defun open-with-coda ()
-  (interactive)
-  (macos-open-with--bin "coda"))
-
-;;;###autoload
-(defun open-with-sublime-text ()
-  (interactive)
-  (macos-open-with--bin "subl"))
-
-;;;###autoload
-(defun open-with-vscode ()
-  (interactive)
-  (macos-open-with--bin "code"))
-
-;;;###autoload
-(defun open-with-tower ()
-  "If inside a file buffer, opens the project
-in Tower.app. Else if in a dired buffer, opens the containing
-directory."
-  (interactive)
+(defun macos-exec-with-file (cmd)
+  "Run the shell CMD with file or directory as its argument."
   (shell-command
-   (concat "gittower" " " (or default-directory dired-directory))))
+   (concat (string-trim cmd) " "
+           (shell-quote-argument
+            (file-truename
+             (cond ((eq major-mode 'dired-mode)
+                    (if-let ((filename (dired-file-name-at-point)))
+                        filename (dired-current-directory t)))
+                   (t (or buffer-file-name (getenv "HOME")))))))))
+
+(defmacro macos-make-external-command (editor &optional executable)
+  "Create an open with editor function for an application
+named EDITOR with executable name or path EXECUTABLE.
+If second argument is not given, then the binary will
+be set to the value of editor."
+  `(defun ,(intern (concat "open-with-" editor)) ()
+     (interactive)
+     (let ((exec ,(or executable editor)))
+       (if (executable-find exec)
+           (macos-exec-with-file exec)
+         (message "executable %s not found" exec)))))
 
 
-(defvar macos-open-with-command-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "o") #'macos-open-with-default-app)
-    (define-key map (kbd "s") #'open-with-sublime-text)
-    (define-key map (kbd "a") #'open-with-atom)
-    (define-key map (kbd "v") #'open-with-vscode)
-    (define-key map (kbd "b") #'open-with-bbedit)
-    (define-key map (kbd "c") #'open-with-coda)
-    (define-key map (kbd "t") #'open-with-tower)
-    map)
-  "Keymap for macos open with.")
-
-(fset 'macos-open-with-command-map macos-open-with-command-map)
+(eval-and-compile
+  (macos-make-external-command "default" "open")
+  (macos-make-external-command "atom")
+  (macos-make-external-command "bbedit")
+  (macos-make-external-command "coda")
+  (macos-make-external-command "sublime-text" "subl")
+  (macos-make-external-command "code" "vscode")
+  (macos-make-external-command "tower" "gittower"))
 
  (provide 'macos-open-with)
