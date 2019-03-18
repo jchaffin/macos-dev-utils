@@ -29,6 +29,7 @@
 (declare-function 'open-with-sublime-text "macos-open-with.el")
 (declare-function 'open-with-vscode "macos-open-with.el")
 (declare-function 'open-with-tower "macos-open-with.el")
+(declare-function 'open-with-pdfpen "macos-open-with.el")
 
 (require 'macos-open-with)
 (require 'macos-iterm)
@@ -38,6 +39,7 @@
     (define-key map (kbd "o") #'open-with-default)
     (define-key map (kbd "s") #'open-with-sublime-text)
     (define-key map (kbd "a") #'open-with-atom)
+    (define-key map (kbd "p") #'open-with-pdfpen)
     (define-key map (kbd "v") #'open-with-vscode)
     (define-key map (kbd "b") #'open-with-bbedit)
     (define-key map (kbd "c") #'open-with-coda)

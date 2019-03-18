@@ -16,20 +16,12 @@
 
 
 ;;; Code:
-
-(defgroup iterm nil
-  "Customization group for iterm shell"
-  :group 'terminal
-  :group 'macos
-  :prefix "macos-iterm-")
-
 (defun get-file-dir-or-home ()
-  "If inside a file buffer, reeturn the directory, else return home."
-  (cond ((eq major-mode 'dired-mode)
-           dired-directory)
-          ((stringp buffer-file-name)
-           (file-name-directory buffer-file-name))
-          (t (directory-file-name default-directory))))
+  "If inside a file buffer, return the directory, else return home."
+  (cond ((eq major-mode 'dired-mode) dired-directory)
+        ((stringp buffer-file-name)
+         (file-name-directory buffer-file-name))
+        (t (directory-file-name default-directory))))
 
 ;;;###autoload
 (defun iterm-goto-filedir-or-home ()
