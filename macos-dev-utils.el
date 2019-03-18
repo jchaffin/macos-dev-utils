@@ -43,7 +43,7 @@
     (define-key map (kbd "c") #'open-with-coda)
     (define-key map (kbd "t") #'open-with-tower)
     map)
-  "MacOS Open With commands. ")
+  "Command map for `macos-open-with'")
 
 (fset 'macos-open-with-command-map macos-open-with-command-map)
 
