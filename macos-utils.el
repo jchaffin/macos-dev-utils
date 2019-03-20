@@ -1,4 +1,4 @@
-;;; macos-dev-utils.el --- Open files in external macOS applications
+;;; macos-utils.el --- Open files in external macOS applications
 ;;
 ;; Copyright (c) 2012-2017 Jacob Chaffin
 ;;
@@ -13,11 +13,9 @@
 ;; Provides commands for launching and interacting with
 ;; external applications and developer tools on macOS >10.12
 
-
-
 ;;; Code
 
-(defun macutils-buffer-file (&optional buffer)
+(defun macos-buffer-file (&optional buffer)
   "Return the quoted name of file BUFFER is visiting, or the default
 directory if there is none."
   (let ((buf (or buffer (current-buffer))))
@@ -29,19 +27,19 @@ directory if there is none."
             (t (if-let ((filename (buffer-file-name buf)))
                    filename default-directory)))))))
 
-(defun macutils-exec-with-file (&rest cmd)
+(defun macos-exec-with-file (&rest cmd)
   "Run the shell CMD with file or directory as its argument. The first
 element in CMD may be either an executable name or the path to an
 executable or a function which takes the concatenated form of the remaining
 elements as its argument."
   (cl-flet ((fcmd (lst) (mapconcat #'identity lst " ")))
     (let ((exec (car exec))
-          (file (macutils-buffer-file)))
+          (file (macos-buffer-file)))
       (cond ((functionp exec) (funcall exec file))
             ((executable-find exec) (shell-command (fcmd (list (fcmd cmd) file))))
             (t (message "executable %s not found" exec))))))
 
-(defmacro macutils-make-external-command (editor &rest executable)
+(defmacro macos-make-external-command (editor &rest executable)
   "Create an open with editor function for an application
 named EDITOR with executable name or path EXECUTABLE.
 If second argument is not given, then the binary will
@@ -50,7 +48,7 @@ be set to the value of editor."
       ,(format "Open with %s" editor)
      (interactive)
      (let ((exec (list ,@(or executable editor))))
-       (apply #'macutils-exec-with-file exec))))
+       (apply #'macos-exec-with-file exec))))
 
 ;;;###autoload
 (defun iterm-focus ()
@@ -62,7 +60,7 @@ return focus to that session. Otherwise launch iTerm."
 
 (defun iterm-cwd (file)
   "Go to current working directory and focus iTerm."
-  (interactive (list (macutils-buffer-file)))
+  (interactive (list (macos-buffer-file)))
   (do-applescript
    (format
     (concat
@@ -90,23 +88,23 @@ With PREFIX, cd to project root."
        "  activate\n"
        "  set _session to current session of current window\n"
        "  tell _session\n"
-       "    set comma(macroexpand '(macutils-make-external-command "iterm" #'iterm-cwd))nd to get the clipboard\n"
+       "    set comma(macroexpand '(macos-make-external-command "iterm" #'iterm-cwd))nd to get the clipboard\n"
        "    write text \"%s\"\n"
        "  end tell\n"
        "end tell")
       cmd))))
 
 (eval-and-compile
-  (macutils-make-external-command "default" "open")
-  (macutils-make-external-command "pdfpen" "open" "-b" "com.smileonmymac.pdfpen-setapp")
-  (macutils-make-external-command "atom")
-  (macutils-make-external-command "bbedit")
-  (macutils-make-external-command "coda")
-  (macutils-make-external-command "sublime-text" "subl")
-  (macutils-make-external-command "vscode" "code")
-  (macutils-make-external-command "tower" "gittower"))
+  (macos-make-external-command "default" "open")
+  (macos-make-external-command "pdfpen" "open" "-b" "com.smileonmymac.pdfpen-setapp")
+  (macos-make-external-command "atom")
+  (macos-make-external-command "bbedit")
+  (macos-make-external-command "coda")
+  (macos-make-external-command "sublime-text" "subl")
+  (macos-make-external-command "vscode" "code")
+  (macos-make-external-command "tower" "gittower"))
 
-(defvar macutils-command-map
+(defvar macos-open-with-command-map
    (let ((map (make-sparse-keymap)))
      (define-key map (kbd "o") #'open-with-default)
      (define-key map (kbd "s") #'open-with-sublime-text)
@@ -118,8 +116,8 @@ With PREFIX, cd to project root."
      (define-key map (kbd "c") #'open-with-coda)
      (define-key map (kbd "t") #'open-with-tower)
      map)
-   "Keymap for `mac-dev-utils' commands")
-(fset 'macutils-command-map macutils-command-map)
+   "Keymap for macOS open commands")
+(fset 'macos-open-with-command-map macos-open-with-command-map)
 
-(provide 'mac-dev-utils)
-;; macos-dev-utils.el ends here
+(provide 'macos-utils)
+;; macos-utils.el ends here
