@@ -118,8 +118,8 @@ With PREFIX, cd to project root."
      (define-key map (kbd "c") #'open-with-coda)
      (define-key map (kbd "t") #'open-with-tower)
      map)
-   "Keymap for `macutils-devutils' commands")
+   "Keymap for `mac-dev-utils' commands")
 (fset 'macutils-command-map macutils-command-map)
 
-(provide 'macutils-dev-utils)
+(provide 'mac-dev-utils)
 ;; macos-dev-utils.el ends here
