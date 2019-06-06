@@ -58,6 +58,7 @@ return focus to that session. Otherwise launch iTerm."
   (do-applescript
    "do shell script \"open -a iTerm\"\n"))
 
+;;;###autoload
 (defun iterm-cwd (file)
   "Go to current working directory and focus iTerm."
   (interactive (list (macos-buffer-file)))
