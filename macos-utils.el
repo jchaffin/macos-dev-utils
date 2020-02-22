@@ -35,9 +35,11 @@ elements as its argument."
   (cl-flet ((fcmd (lst) (mapconcat #'identity lst " ")))
     (let ((exec (car exec))
           (file (macos-buffer-file)))
-      (cond ((functionp exec) (funcall exec file))
-            ((executable-find exec) (shell-command (fcmd (list (fcmd cmd) file))))
-            (t (message "executable %s not found" exec))))))
+      (unwind-protect
+          (cond ((functionp exec) (funcall exec file))
+                ((executable-find exec) (shell-command (fcmd (list (fcmd cmd) file))))
+                (t (message "executable %s not found" exec)))
+        (kill-buffer-if-not-modified (get-file-buffer file))))))
 
 (defmacro macos-make-external-command (editor &rest executable)
   "Create an open with editor function for an application
