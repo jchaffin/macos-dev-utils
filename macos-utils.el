@@ -33,12 +33,12 @@ element in CMD may be either an executable name or the path to an
 executable or a function which takes the concatenated form of the remaining
 elements as its argument."
   (cl-flet ((fcmd (lst) (mapconcat #'identity lst " ")))
-    (let ((exec (car exec))
+    (let ((exec (car cmd))
           (file (macos-buffer-file)))
       (unwind-protect
           (cond ((functionp exec) (funcall exec file))
                 ((executable-find exec) (shell-command (fcmd (list (fcmd cmd) file))))
-                (t (message "executable %s not found" exec)))
+                (t (error "executable %s not found" exec)))
         (kill-buffer-if-not-modified (get-file-buffer file))))))
 
 (defmacro macos-make-external-command (editor &rest executable)
